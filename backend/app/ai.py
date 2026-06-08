@@ -114,17 +114,33 @@ def search_repo_codebase(query: str, repo_path: str, all_files: List[Dict[str, A
     symbol_matches = []
     
     for s in symbols:
-        name = s.name.lower()
-        if query_lower in name or name in query_lower:
-            file_path = s.file_path if hasattr(s, "file_path") else s.get("file_path")
+        name_val = s.get("name") if isinstance(s, dict) else getattr(s, "name", None)
+        if not name_val:
+            continue
+        name_lower = name_val.lower()
+        
+        if query_lower in name_lower or name_lower in query_lower:
+            file_path = None
+            if isinstance(s, dict):
+                file_path = s.get("file_path") or s.get("path")
+            else:
+                file_path = getattr(s, "file_path", None)
+                if not file_path and getattr(s, "file_index", None):
+                    file_path = getattr(s.file_index, "path", None)
+                if not file_path:
+                    file_path = getattr(s, "path", None)
+            
             if file_path:
                 matched_files_from_symbols.add(file_path)
-                symbol_matches.append((file_path, s.name, s.type))
+                s_type = s.get("type", "") if isinstance(s, dict) else getattr(s, "type", "")
+                symbol_matches.append((file_path, name_val, s_type))
                 
     # 2. Search file names and content keywords
     for file in all_files:
-        path = file.path if hasattr(file, "path") else file.get("path")
-        name = file.name if hasattr(file, "name") else file.get("name")
+        path = file.get("path") if isinstance(file, dict) else getattr(file, "path", None)
+        name = file.get("name") if isinstance(file, dict) else getattr(file, "name", None)
+        if not path or not name:
+            continue
         full_absolute_path = os.path.join(repo_path, path)
         
         score = 0
@@ -147,7 +163,8 @@ def search_repo_codebase(query: str, repo_path: str, all_files: List[Dict[str, A
             reasons.append(f"Contains matching symbols: {', '.join(matching_syms[:3])}")
             
         # Keyword search inside content (if file is < 1MB)
-        if file.get("size_bytes", 0) < 1024 * 1024:
+        size_bytes = file.get("size_bytes", 0) if isinstance(file, dict) else getattr(file, "size_bytes", 0)
+        if size_bytes < 1024 * 1024:
             try:
                 with open(full_absolute_path, "r", encoding="utf-8", errors="ignore") as f:
                     content = f.read()
