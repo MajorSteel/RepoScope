@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+:root {
+  --background: #030712; /* Deep space black */
+  --foreground: #f8fafc;
+  --card: rgba(15, 23, 42, 0.65); /* Translucent glass */
+  --card-border: rgba(255, 255, 255, 0.08); /* Ethereal white edge */
+  --primary: #6366f1; /* Glowing violet */
+  --primary-hover: #818cf8;
+  --accent: #10b981; /* Emerald active green */
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-border: var(--card-border);
+  --color-primary-indigo: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-accent-rose: var(--accent);
+  --color-muted-slate: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #030712;
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #6366f1;
+}
+
+/* 3D Perspective Grid Background */
+.perspective-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.grid-3d {
+  background-image: linear-gradient(rgba(99, 102, 241, 0.07) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(99, 102, 241, 0.07) 1px, transparent 1px);
+  background-size: 50px 50px;
+  transform: perspective(600px) rotateX(65deg) translateY(-150px) translateZ(-60px);
+  transform-origin: top center;
+  height: 200%;
+  width: 200%;
+  position: absolute;
+  top: 0;
+  left: -50%;
+  opacity: 0.65;
+}
+
+/* Premium 3D Glassmorphic Cards (Glassmorphism + Bevels) */
+.glass-panel-3d {
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 2px solid rgba(0, 0, 0, 0.5); /* 3D bottom shadow */
+  border-right: 2px solid rgba(0, 0, 0, 0.3);
+  box-shadow: 
+    0 15px 35px -5px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.glass-panel-3d:hover {
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow: 
+    0 25px 45px -10px rgba(99, 102, 241, 0.15),
+    0 0 1px rgba(99, 102, 241, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* React Flow Visual Customizations - Themed as floating 3D nodes */
+.react-flow__renderer {
+  background-color: #050814 !important;
+}
+.react-flow__node {
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.5) !important;
+  color: #f8fafc !important;
+  border-radius: 8px !important;
+  font-size: 11px !important;
+  padding: 8px 12px !important;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.4) !important;
+  transition: all 0.2s ease !important;
+}
+.react-flow__node:hover {
+  transform: translateY(-2px) !important;
+  border-color: rgba(99, 102, 241, 0.4) !important;
+  box-shadow: 0 15px 30px rgba(99, 102, 241, 0.2) !important;
+}
+.react-flow__handle {
+  background: #6366f1 !important;
+}
+.react-flow__edge-path {
+  stroke: #334155 !important;
+  stroke-width: 2px !important;
+}
+
+/* 3D Isometric Text Shadow styling */
+.text-shadow-3d {
+  text-shadow: 
+    0 1px 0 #475569,
+    0 2px 0 #334155,
+    0 3px 0 #1e293b,
+    0 8px 15px rgba(0,0,0,0.5);
+}

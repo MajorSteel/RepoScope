@@ -1,0 +1,20 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package descriptors
+COPY frontend/package.json frontend/package-lock.json* ./
+
+# Install packages
+RUN npm ci
+
+# Copy frontend source files
+COPY frontend ./
+
+# Build the Next.js application
+ENV NEXT_TELEMETRY_DISABLED=1
+RUN npm run build
+
+EXPOSE 3000
+
+CMD ["npm", "run", "start"]
